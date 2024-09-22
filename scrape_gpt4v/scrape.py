@@ -3,12 +3,12 @@ import os
 import re
 import pandas as pd
 from typing import Any, Dict, List
-import requests
 from PIL import Image as PILImage
 from scraper import ScraperBot, ScraperBotConfig
 from helpers import starts_with_quotes, get_start_end_quotes
 from dataclasses import dataclass
 from datasets import Image
+from security import safe_requests
 
 
 @dataclass(frozen=True)
@@ -83,7 +83,7 @@ def prepare_dataset(messages: List[HFDatasetScheme]) -> pd.DataFrame:
 
 
 def get_image(link: str) -> bytes:
-    image = PILImage.open(requests.get(link, stream=True).raw).convert("RGB")
+    image = PILImage.open(safe_requests.get(link, stream=True).raw).convert("RGB")
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format="PNG")
     return {"bytes": img_byte_arr.getvalue(), "path": None}

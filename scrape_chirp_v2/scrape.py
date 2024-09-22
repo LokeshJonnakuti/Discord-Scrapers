@@ -3,12 +3,12 @@ import os
 import re
 import pandas as pd
 from typing import Any, Dict, List
-import requests
 from PIL import Image as PILImage
 from scraper import ScraperBot, ScraperBotConfig
 from helpers import has_code_block, get_code_block
 from dataclasses import dataclass
 from datasets import Audio
+from security import safe_requests
 
 
 @dataclass(frozen=True)
@@ -104,7 +104,7 @@ def prepare_dataset(messages: List[HFDatasetScheme]) -> pd.DataFrame:
 
 
 def download_fn(link: str) -> bytes:
-    response = requests.get(link)
+    response = safe_requests.get(link)
     return response.content
 
 

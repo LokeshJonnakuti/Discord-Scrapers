@@ -32,9 +32,9 @@ from datasets import (
     Features,
     utils,
 )
-import requests
 from PIL import Image as PILImage
 from dataclasses import fields
+from security import safe_requests
 
 disable_caching()
 
@@ -502,7 +502,7 @@ class ScraperBot:
             if after_message_id:
                 url += f"&after={after_message_id}"
 
-            response = requests.get(url, headers=self.headers)
+            response = safe_requests.get(url, headers=self.headers)
 
             if response.status_code == 200:
                 messages = response.json()
